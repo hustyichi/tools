@@ -2,6 +2,7 @@ from langchain.chains.qa_with_sources.loading import BaseCombineDocumentsChain
 from langchain.docstore.document import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.tools import BaseTool
+from loguru import logger
 from pydantic import Field
 
 from app.tools.raw_web_query import web_query
@@ -24,6 +25,8 @@ class WebpageQATool(BaseTool):
     def _run(self, url: str, question: str) -> str:
         """Useful for browsing websites and scraping the text information."""
         result = web_query.run(url)
+        logger.info("request {}, got result {}", url, result)
+
         docs = [Document(page_content=result, metadata={"source": url})]
         web_docs = self.text_splitter.split_documents(docs)
         results = []
@@ -31,6 +34,8 @@ class WebpageQATool(BaseTool):
         for i in range(0, len(web_docs), 4):
             input_docs = web_docs[i:i+4]
             window_result = self.qa_chain({"input_documents": input_docs, "question": question}, return_only_outputs=True)
+            logger.info("------------------------> split: {}", input_docs)
+            logger.info("==========> chain got result {}", window_result)
             results.append(f"Response from window {i} - {window_result}")
         results_docs = [Document(page_content="\n".join(results), metadata={"source": url})]
         return self.qa_chain({"input_documents": results_docs, "question": question}, return_only_outputs=True)
