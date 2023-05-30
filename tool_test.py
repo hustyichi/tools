@@ -10,4 +10,4 @@ query_website_tool = WebpageQATool(qa_chain=load_qa_with_sources_chain(llm))
 if __name__ == "__main__":
     url = "https://zhuanlan.zhihu.com/p/64506277"
     question = "四岁女孩值的推荐的童书"
-    query_website_tool.run(url, question)
+    query_website_tool.run({"url": url, "question": question})
