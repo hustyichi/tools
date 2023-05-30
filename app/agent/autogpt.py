@@ -22,3 +22,7 @@ agent = AutoGPT.from_llm_and_tools(
     llm=llm,
     # human_in_the_loop=True, # Set to True if you want to add feedback at each step.
 )
+
+
+if __name__ == "__main__":
+    agent.run(["四岁女孩童书推荐"])
