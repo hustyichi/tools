@@ -1,7 +1,17 @@
+import faiss
+
 from langchain.chains.qa_with_sources.loading import load_qa_with_sources_chain
 from langchain.chat_models import ChatOpenAI
+from langchain.docstore import InMemoryDocstore
+from langchain.embeddings import OpenAIEmbeddings
 from langchain.experimental.autonomous_agents.autogpt.agent import AutoGPT
 from langchain.tools import DuckDuckGoSearchRun
+from langchain.vectorstores import FAISS
+
+embeddings_model = OpenAIEmbeddings()
+embedding_size = 1536
+index = faiss.IndexFlatL2(embedding_size)
+vectorstore = FAISS(embeddings_model.embed_query, index, InMemoryDocstore({}), {})
 
 from app.tools.web_query_tool import WebpageQATool
 
@@ -20,6 +30,7 @@ agent = AutoGPT.from_llm_and_tools(
     ai_role="Assistant",
     tools=tools,
     llm=llm,
+    memory=vectorstore.as_retriever(search_kwargs={"k": 8}),
     # human_in_the_loop=True, # Set to True if you want to add feedback at each step.
 )
 
