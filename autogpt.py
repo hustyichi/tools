@@ -15,7 +15,7 @@ embedding_size = 1536
 index = faiss.IndexFlatL2(embedding_size)
 vectorstore = FAISS(embeddings_model.embed_query, index, InMemoryDocstore({}), {})
 
-llm = ChatOpenAI(model_name="gpt-3.5", temperature=1.0)
+llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=1.0)
 query_website_tool = WebpageQATool(qa_chain=load_qa_with_sources_chain(llm))
 web_search = DuckDuckGoSearchRun()
 
