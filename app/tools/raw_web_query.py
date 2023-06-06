@@ -25,6 +25,7 @@ from webdriver_manager.microsoft import EdgeChromiumDriverManager as EdgeDriverM
 
 @tool
 def web_query(url: str, selenium_web_browser = "firefox") -> tuple[WebDriver, str]:
+    """Verbose way to scrape a whole webpage"""
     options_available = {
         "chrome": ChromeOptions,
         "edge": EdgeOptions,
