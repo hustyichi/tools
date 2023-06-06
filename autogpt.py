@@ -8,12 +8,12 @@ from langchain.experimental.autonomous_agents.autogpt.agent import AutoGPT
 from langchain.tools import DuckDuckGoSearchRun
 from langchain.vectorstores import FAISS
 
+from app.tools.web_query_tool import WebpageQATool
+
 embeddings_model = OpenAIEmbeddings()
 embedding_size = 1536
 index = faiss.IndexFlatL2(embedding_size)
 vectorstore = FAISS(embeddings_model.embed_query, index, InMemoryDocstore({}), {})
-
-from app.tools.web_query_tool import WebpageQATool
 
 llm = ChatOpenAI(model_name="gpt-3.5", temperature=1.0)
 query_website_tool = WebpageQATool(qa_chain=load_qa_with_sources_chain(llm))
