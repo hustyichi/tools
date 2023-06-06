@@ -25,7 +25,6 @@ class WebpageQATool(BaseTool):
     def _run(self, url: str, question: str) -> str:
         """Useful for browsing websites and scraping the text information."""
         result = web_query.run(url)
-        logger.info("request {}, got result {}", url, result)
 
         docs = [Document(page_content=result, metadata={"source": url})]
         web_docs = self.text_splitter.split_documents(docs)
